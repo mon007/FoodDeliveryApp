@@ -5,10 +5,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Icon from "react-native-feather";
 import {themeColors} from "../themes";
 import Categories from "../components/Categories";
+import FeaturedRow from "../components/FeaturedRow";
+import { featured } from '@/constants';
 
 export default function Home() {
   return (
-  <SafeAreaView className="bg-white">
+  <SafeAreaView className="bg-gray">
     <StatusBar className="dark-content"/>
             {/* status bar*/}
         <View className="flex-row items-center space-x-2 px-4 pb-8">
@@ -28,6 +30,22 @@ export default function Home() {
             {/* Categories */}
             <ScrollView showsHorizontalScrollIndicator={false} contentContainerStyle={{paddingBottom:20}}>
                 <Categories/>
+
+                <View className="mt-5">
+                    {
+                        [featured, featured, featured].map((item, index)=>{
+                            return(
+                                <FeaturedRow
+                                    key={index}
+                                    title={item.title}
+                                    restuarants = {item.restuarants}
+                                    description = {item.description}
+                                    />
+                            )
+                        })
+                    }
+
+                </View>
 
             </ScrollView>
 
