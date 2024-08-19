@@ -1,11 +1,14 @@
 import { themeColors } from '@/themes';
+import { useNavigation } from 'expo-router';
 import * as React from 'react';
 import { View, Image,TouchableWithoutFeedback,Text } from 'react-native';
 import * as Icon from "react-native-feather";
 
 function RestuarantCard({item}) {
+    const navigation = useNavigation();
   return (
- <TouchableWithoutFeedback>
+ <TouchableWithoutFeedback
+    onPress={()=>navigation.navigate('Restuarant',{...item})}>
     <View className = "mr-6 bg-gray-100 rounded-3xl shadow-lg" style={{shadowColor:themeColors.bgColor(0.8),shadowRadius:7}}>
         <Image className="h-36 w-40 rounded-t-3xl" source = {item.image}/>
         <View className="px-3 pb-4 space-y-2">
