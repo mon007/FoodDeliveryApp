@@ -6,6 +6,7 @@ import { themeColors } from '@/themes';
 import { useNavigation } from 'expo-router';
 import DishRow from '../components/dishRow';
 import CartIcon from '../components/cartIcon';
+import { StatusBar } from 'expo-status-bar';
 
 
 
@@ -16,6 +17,7 @@ function Restuarant() {
   return (
     <View>
       <CartIcon/>
+      <StatusBar style="light"/>
       <ScrollView>
         <View className="relative">
           <Image className="w-full h-40" source={items.image} />
