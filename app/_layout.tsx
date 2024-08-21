@@ -10,6 +10,8 @@ import Home from '../screens/Home';
 import CartScreen from '../screens/CartScreen';
 import OrderPreparingScreen from '../screens/OrderPreparingScreen';
 import DeliveryScreen from '../screens/DeliveryScreen';
+import { store } from '../store';
+import { Provider } from 'react-redux'
 
 const Stack = createNativeStackNavigator();
 
@@ -35,7 +37,8 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <Provider store={store}>
+  <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
        <NavigationContainer independent={true}>
       <Stack.Navigator screenOptions={{headerShown:false}}>
         <Stack.Screen name="Home" component={Home} />
@@ -46,5 +49,7 @@ export default function RootLayout() {
       </Stack.Navigator>
     </NavigationContainer>
     </ThemeProvider>
+    </Provider>
+  
   );
 }

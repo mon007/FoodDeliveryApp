@@ -5,12 +5,33 @@ import * as Icon from "react-native-feather";
 import { themeColors } from '@/themes';
 import { useNavigation } from 'expo-router';
 import { featured } from '@/constants';
+import { selectRestuarant } from '@/slices/RestuarantSlice';
+import { removeFromCart, selectCartItems, selectCartTotal } from '@/slices/CartSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 
 function CartScreen() {
+    const restaurant = useSelector(selectRestuarant);
   const navigation = useNavigation();
-  const restaurant = featured.restuarants[0];
+  const cartItems = useSelector(selectCartItems);
+  const cartTotal = useSelector(selectCartTotal);
+  const [groupedItems, setGroupedItems] = React.useState({});
+  const dispatch = useDispatch();
+  const deliveryFee = 2;
+
+  React.useEffect(()=>{
+const items = cartItems.reduce((group, item)=>{
+    if(group[item.id]){
+        group[item.id].push(item);
+    }else{
+        group[item.id] = [item];
+    }
+    return group;
+},{})
+setGroupedItems(items);
+  },[cartItems])
+
   return (
     <View className = "bg-white flex-1">
         <View className ="relative py-4 shadow-sm">
@@ -39,14 +60,15 @@ function CartScreen() {
         }}
         className="bg-white pt-5">
             {
-                restaurant.dishes.map((dish,index)=>{
+                Object.entries(groupedItems).map(([key, items])=>{
+                    let dish = items[0]
                     return(
-                        <View className="flex-row items-center space-x-3 py-2 px-4 bg-white rounded-3xl mx-2 mb-3 shadow-md">
-                            <Text className="font-bold" style={{color:themeColors.text}}>2 X</Text>
+                        <View key={key} className="flex-row items-center space-x-3 py-2 px-4 bg-white rounded-3xl mx-2 mb-3 shadow-md">
+                            <Text className="font-bold" style={{color:themeColors.text}}>{items.length} X</Text>
                             <Image className="h-14 w-14 rounded-full" source={dish.image}/>
                             <Text className="flex-1 font-bold text-gray-700">{dish.name}</Text>
                             <Text className="font-semibold text-base">{dish.price}</Text>
-                            <TouchableOpacity className="p-1 rounded-full" style={{backgroundColor:themeColors.bgColor(1)}}>
+                            <TouchableOpacity onPress={()=>dispatch(removeFromCart({id:dish.id}))} className="p-1 rounded-full" style={{backgroundColor:themeColors.bgColor(1)}}>
                                     <Icon.Minus strokeWidth={2} height={20} width={20} stroke='white'/>
 
                             </TouchableOpacity>
@@ -61,15 +83,15 @@ function CartScreen() {
     <View className=" p-6 px-8 rounded-t-3xl space-y-4" style={{backgroundColor:themeColors.bgColor(0.2)}}>
         <View className="flex-row justify-between">
             <Text className="text-gray-700">Subtotal</Text>
-            <Text className="text-gray-700">Rs. 20</Text>
+            <Text className="text-gray-700">Rs. {cartTotal}</Text>
         </View>
         <View className="flex-row justify-between">
             <Text className="text-gray-700">Delivery fee</Text>
-            <Text className="text-gray-700">Rs. 2</Text>
+            <Text className="text-gray-700">Rs. {deliveryFee}</Text>
         </View>
         <View className="flex-row justify-between">
             <Text className="text-gray-700 font-extrabold">Order total</Text>
-            <Text className="text-gray-700 font-extrabold">Rs. 22</Text>
+            <Text className="text-gray-700 font-extrabold">Rs. {deliveryFee + cartTotal}</Text>
         </View>
         <View>
             <TouchableOpacity   

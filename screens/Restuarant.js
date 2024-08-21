@@ -7,6 +7,8 @@ import { useNavigation } from 'expo-router';
 import DishRow from '../components/dishRow';
 import CartIcon from '../components/cartIcon';
 import { StatusBar } from 'expo-status-bar';
+import { useDispatch } from 'react-redux';
+import { setRestuarant } from '@/slices/RestuarantSlice';
 
 
 
@@ -14,6 +16,13 @@ function Restuarant() {
   const { params } = useRoute();
   let items = params;
   const navigation = useNavigation();
+
+  const dispatch = useDispatch();
+  React.useEffect(()=>{
+    if(items && items.id){
+      dispatch(setRestuarant({...items}))
+    }
+  })
   return (
     <View>
       <CartIcon/>

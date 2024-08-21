@@ -6,12 +6,20 @@ import { themeColors } from '@/themes';
 import { useNavigation } from 'expo-router';
 import { featured } from '@/constants';
 import MapView, {Marker} from 'react-native-maps';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectRestuarant } from '@/slices/RestuarantSlice';
+import { emptyCart } from '@/slices/CartSlice';
 
 
 
 function DeliveryScreen() {
-  const restaurant = featured.restuarants[0];
+  const restaurant = useSelector(selectRestuarant);
   const navigation = useNavigation();
+ const dispatch = useDispatch()
+  const cancelOrder = () => {
+    navigation.navigate('Home');
+    dispatch(emptyCart())
+  }
   return (
   <View className="flex-1">
     <MapView
@@ -64,7 +72,7 @@ function DeliveryScreen() {
                 <TouchableOpacity onPress={()=>navigation.navigate('Home')} className="bg-white p-2 rounded-full">
                   <Icon.Phone fill={themeColors.bgColor(1)} stroke={themeColors.bgColor(1)} strokeWidth={1}/>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>navigation.navigate('Home')}  className="bg-white p-2 rounded-full">
+                <TouchableOpacity onPress={cancelOrder}  className="bg-white p-2 rounded-full">
                   <Icon.X stroke={'red'} strokeWidth={4}/>
                 </TouchableOpacity>
             </View>
